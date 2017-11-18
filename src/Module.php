@@ -23,9 +23,6 @@ class Module implements ModuleInterface {
         if ($event === NewDayModule::HookAfterNewDay) {
             $turns = 20;
             $viewpoint = $context->getDataField("viewpoint");
-            print("It is a new day. Character health is ");
-            print($g->getCharacter()->getHealth());
-            print("\n");
 
             if ($g->getCharacter()->isAlive() == false) {
                 $turns-=5;
