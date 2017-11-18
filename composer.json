@@ -17,10 +17,6 @@
     },
     "repositories": [
         {
-            "type": "path",
-            "url": "../module-new-day"
-        },
-        {
             "type": "composer",
             "url": "http://code.lot.gd"
         }

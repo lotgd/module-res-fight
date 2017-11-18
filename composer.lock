@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3e05b346f3b783eedd62d9a8fc2de548",
-    "content-hash": "ffcef4d6c9ddfcaa52875bc1b34a71f6",
+    "hash": "c1a36e45b819958d570e31435e36fe65",
+    "content-hash": "28c9c801c07f6481498251631ac6cb81",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1148,11 +1148,16 @@
         {
             "name": "lotgd/module-new-day",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lotgd/module-new-day.git",
+                "reference": "3f2c765b2f88935720b4ab41af717413d6639768"
+            },
             "dist": {
-                "type": "path",
-                "url": "../module-new-day/",
-                "reference": "0ae03429febf1425deabfe0a1a7e8581d78eb83e",
-                "shasum": null
+                "type": "zip",
+                "url": "https://api.github.com/repos/lotgd/module-new-day/zipball/3f2c765b2f88935720b4ab41af717413d6639768",
+                "reference": "3f2c765b2f88935720b4ab41af717413d6639768",
+                "shasum": ""
             },
             "require": {
                 "lotgd/core": "dev-feature/viewpoint-api as v0.3.3-alpha",
@@ -1178,7 +1183,12 @@
                     "email": "basilius.sauter@gmail.com"
                 }
             ],
-            "description": "A new day module."
+            "description": "A new day module.",
+            "support": {
+                "source": "https://github.com/lotgd/module-new-day/tree/master",
+                "issues": "https://github.com/lotgd/module-new-day/issues"
+            },
+            "time": "2017-11-18 13:57:19"
         },
         {
             "name": "lotgd/module-village",
