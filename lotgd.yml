@@ -1,0 +1,3 @@
+entityNamespace: "LotGD\\Module\\Res\\Fight\\"
+subscriptionPatterns:
+  - "#h/lotgd/module-new-day/after#"

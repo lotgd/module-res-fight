@@ -1,0 +1,41 @@
+{
+    "name": "lotgd/module-res-fight",
+    "description": "A resource module which provides basic fighting capabilities as well as hooks to extend them.",
+    "type": "lotgd-module",
+    "license": "AGPL-3.0",
+    "authors": [
+        {
+            "name": "Basilius Sauter",
+            "email": "basilius.sauter@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "LotGD\\Module\\Res\\Fight\\": "src/",
+            "LotGD\\Module\\Res\\Fight\\Tests\\": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../module-new-day"
+        },
+        {
+            "type": "composer",
+            "url": "http://code.lot.gd"
+        }
+    ],
+    "require": {
+        "lotgd/core": "dev-feature/viewpoint-api as v0.3.3-alpha",
+        "lotgd/module-village": "dev-master as v0.3.3-alpha",
+        "lotgd/module-new-day": "dev-master as v0.3.3-alpha"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "^4.1|^5.1",
+        "phpunit/dbunit": "*"
+    },
+    "config": {
+        "secure-http": false
+    }
+}
