@@ -6,8 +6,13 @@ namespace LotGD\Module\Res\Fight;
 use LotGD\Core\Battle;
 use LotGD\Core\Events\EventContextData;
 use LotGD\Core\Exceptions\ArgumentException;
-use LotGD\Core\Models\Scene;
 
+/**
+ * Class EventFightActionsData
+ *
+ * EventContextData for HookSelectAction
+ * @package LotGD\Module\Res\Fight
+ */
 class EventFightActionsData extends EventContextData
 {
     public function __construct(array $data)
@@ -32,6 +37,12 @@ class EventFightActionsData extends EventContextData
             throw new ArgumentException("Array field 'battleIdentifier' is required.");
         } elseif (is_string($data["battleIdentifier"]) === false) {
             throw new ArgumentException("Array field 'battleIdentifier' must be a string.");
+        }
+
+        if (!isset($data["createActionCallback"])) {
+            throw new ArgumentException("Array field 'createActionCallback' is required.");
+        } elseif (is_callable($data["createActionCallback"]) === false) {
+            throw new ArgumentException("Array field 'createActionCallback' must be a string.");
         }
 
         parent::__construct($data);

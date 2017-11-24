@@ -3,20 +3,13 @@ declare(strict_types=1);
 
 namespace LotGD\Module\Res\Fight\Tests;
 
-use Doctrine\Common\Util\Debug;
 use LotGD\Core\Events\EventContext;
 use LotGD\Core\Events\EventContextData;
-use LotGD\Core\Models\Scene;
-use Monolog\Logger;
-use Monolog\Handler\NullHandler;
 
-use LotGD\Core\Configuration;
 use LotGD\Core\Game;
 use LotGD\Core\Models\Character;
-use LotGD\Core\Models\Module as ModuleModel;
 
 use LotGD\Module\Res\Fight\Module;
-use LotGD\Module\Res\Fight\Fight;
 
 class NewDayResetTest extends ModuleTestCase
 {

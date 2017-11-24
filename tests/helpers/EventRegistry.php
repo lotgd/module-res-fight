@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace LotGD\Module\Res\Fight\Tests\helpers;
 
 
-use Doctrine\Common\Util\Debug;
 use LotGD\Core\Events\EventContext;
 use LotGD\Core\Game;
 

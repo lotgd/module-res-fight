@@ -9,6 +9,12 @@ use LotGD\Core\Events\EventContextData;
 use LotGD\Core\Exceptions\ArgumentException;
 use LotGD\Core\Models\Viewpoint;
 
+/**
+ * Class EventFightActionChosen
+ *
+ * EventContextData container for HookFightActionChosen
+ * @package LotGD\Module\Res\Fight
+ */
 class EventFightActionChosen extends EventContextData
 {
     public function __construct(array $data)

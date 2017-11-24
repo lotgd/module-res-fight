@@ -3,11 +3,9 @@
 namespace LotGD\Module\Res\Fight\Tests;
 
 use DateTime;
-use Doctrine\Common\Util\Debug;
 use LotGD\Core\Game;
 use LotGD\Core\Models\Character;
 use LotGD\Core\Models\Scene;
-use LotGD\Core\Models\Viewpoint;
 use LotGD\Module\NewDay\Module as NewDayModule;
 use LotGD\Module\Res\Fight\Module as FightModule;
 use LotGD\Module\Res\Fight\Fight;

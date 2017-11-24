@@ -3,14 +3,12 @@ declare(strict_types=1);
 
 namespace LotGD\Module\Res\Fight;
 
-use Doctrine\DBAL\Schema\View;
 use LotGD\Core\Action;
 use LotGD\Core\ActionGroup;
 use LotGD\Core\Battle;
 use LotGD\Core\Game;
 use LotGD\Core\Models\FighterInterface;
 use LotGD\Core\Models\Scene;
-use LotGD\Core\Models\Viewpoint;
 use LotGD\Module\Res\Fight\Module as FightModule;
 
 class Fight
@@ -103,6 +101,11 @@ class Fight
             ->findOneBy(["template" => FightModule::SceneBattle]);
         $sceneId = $scene->getId();
 
+        $parameterField = self::ActionParameterField;
+        $createActionCallback = function($title, $parameterValue) use ($sceneId, $parameterField) {
+            return new Action($sceneId, $title, [$parameterField => $parameterValue]);
+        };
+
         /** @var array<ActionGroup> */
         $groups = [
             new ActionGroup(self::ActionGroupFight, "Fight", 0),
@@ -110,12 +113,12 @@ class Fight
         ];
 
         $groups[0]->setActions([
-            new Action($sceneId, "Attack", [self::ActionParameterField => self::ActionParameterAttack])
+            $createActionCallback("Attack", self::ActionParameterAttack),
         ]);
 
-        $groups[1]->setActions([
+        /*$groups[1]->setActions([
             new Action($sceneId, "Try to Escape", [self::ActionParameterField => self::ActionParameterFlee])
-        ]);
+        ]);*/
 
         // Event to modify action groups. Must put battle and scene into event context. Character is in global context.
         $hookData = $this->game->getEventManager()->publish(
@@ -124,7 +127,8 @@ class Fight
                 "groups" => $groups,
                 "battle" => $this->battle,
                 "referrerSceneId" => $this->getReferrerSceneId(),
-                "battleIdentifier" => $this->getBattleIdentifier()
+                "battleIdentifier" => $this->getBattleIdentifier(),
+                "createActionCallback" => $createActionCallback
             ])
         );
 

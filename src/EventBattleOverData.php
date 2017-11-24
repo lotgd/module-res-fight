@@ -8,6 +8,12 @@ use LotGD\Core\Events\EventContextData;
 use LotGD\Core\Exceptions\ArgumentException;
 use LotGD\Core\Models\Viewpoint;
 
+/**
+ * Class EventBattleOverData
+ *
+ * Contains data if the fight event is over.
+ * @package LotGD\Module\Res\Fight
+ */
 class EventBattleOverData extends EventContextData
 {
     public function __construct(array $data)

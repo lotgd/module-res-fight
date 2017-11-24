@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace LotGD\Module\Res\Fight;
 
-use Composer\Script\Event;
-use Doctrine\Common\Util\Debug;
 use LotGD\Core\Game;
 use LotGD\Core\Events\EventContext;
 use LotGD\Core\Models\Scene;
