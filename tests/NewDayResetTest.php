@@ -18,7 +18,7 @@ use LotGD\Core\Models\Module as ModuleModel;
 use LotGD\Module\Res\Fight\Module;
 use LotGD\Module\Res\Fight\Fight;
 
-class ModuleTest extends ModuleTestCase
+class NewDayResetTest extends ModuleTestCase
 {
     const Library = 'lotgd/module-res-fight';
 
