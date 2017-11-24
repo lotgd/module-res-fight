@@ -24,6 +24,7 @@ class Fight
 
     const ActionParameterField = FightModule::ModuleIdentifier . "/inFight";
     const ActionParameterAttack = FightModule::ModuleIdentifier . "/attack";
+    const ActionParameterFlee = FightModule::ModuleIdentifier . "/flee";
 
     /** @var Game */
     private $game;
@@ -112,13 +113,18 @@ class Fight
             new Action($sceneId, "Attack", [self::ActionParameterField => self::ActionParameterAttack])
         ]);
 
+        $groups[1]->setActions([
+            new Action($sceneId, "Try to Escape", [self::ActionParameterField => self::ActionParameterFlee])
+        ]);
+
         // Event to modify action groups. Must put battle and scene into event context. Character is in global context.
         $hookData = $this->game->getEventManager()->publish(
-            FightModule::HookFightActions,
+            FightModule::HookSelectAction,
             New EventFightActionsData([
                 "groups" => $groups,
                 "battle" => $this->battle,
-                "scene" => $scene,
+                "referrerSceneId" => $this->getReferrerSceneId(),
+                "battleIdentifier" => $this->getBattleIdentifier()
             ])
         );
 
@@ -175,23 +181,35 @@ class Fight
      */
     public function process(array $parameters)
     {
-        // @ToDo: Add hook to process ActionParameterField
         $v = $this->game->getViewpoint();
         $v->clearDescription();
 
-        if (isset($parameters[self::ActionParameterField])) {
+        // Event to modify action groups. Must put battle and scene into event context. Character is in global context.
+        $hookData = $this->game->getEventManager()->publish(
+            FightModule::HookActionChosen,
+            new EventFightActionChosen([
+                "viewpoint" => $v,
+                "actionParameter" => $parameters[self::ActionParameterField],
+                "battle" => $this->battle,
+                "referrerSceneId" => $this->getReferrerSceneId(),
+                "battleIdentifier" => $this->getBattleIdentifier(),
+                "blockNormalFightProcessing" => false,
+            ])
+        );
+
+        if (isset($parameters[self::ActionParameterField]) and $hookData->get("blockNormalFightProcessing") !== true) {
             switch ($parameters[self::ActionParameterField]) {
                 default:
-                case "attack":
-                    $this->battle->fightNRounds();
+                case self::ActionParameterAttack:
+                    $this->battle->fightNRounds(1);
                     break;
             }
+        }
 
-            $events = $this->battle->getEvents();
+        $events = $this->battle->getEvents();
 
-            foreach ($events as $event) {
-                $v->addDescriptionParagraph($event->decorate($this->game));
-            }
+        foreach ($events as $event) {
+            $v->addDescriptionParagraph($event->decorate($this->game));
         }
     }
 

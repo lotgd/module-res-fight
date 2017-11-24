@@ -18,8 +18,9 @@ class Module implements ModuleInterface {
     const CharacterPropertyBattleState = self::ModuleIdentifier . "/battleState";
     const CharacterPropertyTurns = self::ModuleIdentifier . "/turns";
 
-    const HookAfterBattle = "h/" . self::ModuleIdentifier . "/battleOver";
-    const HookFightActions = "h/" . self::ModuleIdentifier . "/fightActions";
+    const HookBattleOver = "h/" . self::ModuleIdentifier . "/battleOver";
+    const HookSelectAction = "h/" . self::ModuleIdentifier . "/fightSelectAction";
+    const HookActionChosen = "h/" . self::ModuleIdentifier . "/fightActionChosen";
 
     const ModulePropertyBattleSceneId = self::ModuleIdentifier . "/battleSceneId";
 
@@ -90,7 +91,7 @@ class Module implements ModuleInterface {
         // Check if fight is over to publish "is over" event
         if ($fight->isOver()) {
             $hookData = $g->getEventManager()->publish(
-                self::HookAfterBattle,
+                self::HookBattleOver,
                 New EventBattleOverData([
                     "battle" => $fight->getBattle(),
                     "viewpoint" => $v,

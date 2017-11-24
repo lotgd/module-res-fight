@@ -87,7 +87,7 @@ class FightHelperTest extends ModuleTestCase
         $fight->clear();
     }
 
-    public function testIfFightActionHookIsCalled()
+    public function testIfFightHooksAreCalled()
     {
         $this->preloadGameConditions(8);
         $enemy = $this->getEntityManager()->getRepository(Character::class)->find(7);
@@ -98,11 +98,11 @@ class FightHelperTest extends ModuleTestCase
         $fight->showFightActions();
 
         // Check if EventRegistrator registered the fightAction Hook
-        $this->assertSame(1, EventRegistry::$registration[FightModule::HookFightActions]);
+        $this->assertSame(1, EventRegistry::$registration[FightModule::HookSelectAction]);
 
         // Register an a reaction for the afterBattle hook before it actually happens.
         $works = False;
-        EventRegistry::reactOn(FightModule::HookAfterBattle, function ($game, $context) use (&$works, $villageSceneId) {
+        EventRegistry::reactOn(FightModule::HookBattleOver, function ($game, $context) use (&$works, $villageSceneId) {
             $sceneId = $context->getDataField("referrerSceneId");
             $battleIdentifier = $context->getDataField("battleIdentifier");
 
@@ -117,7 +117,8 @@ class FightHelperTest extends ModuleTestCase
 
         // Validate if the AfterBattle hook works properly
         $this->assertTrue($works);
-        $this->assertSame(1, EventRegistry::$registration[FightModule::HookAfterBattle]);
+        $this->assertSame(1, EventRegistry::$registration[FightModule::HookBattleOver]);
+        $this->assertSame(1, EventRegistry::$registration[FightModule::HookActionChosen]);
 
         EventRegistry::reset();
     }

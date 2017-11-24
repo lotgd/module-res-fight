@@ -3,17 +3,20 @@ declare(strict_types=1);
 
 namespace LotGD\Module\Res\Fight;
 
+
 use LotGD\Core\Battle;
 use LotGD\Core\Events\EventContextData;
 use LotGD\Core\Exceptions\ArgumentException;
-use LotGD\Core\Models\Scene;
+use LotGD\Core\Models\Viewpoint;
 
-class EventFightActionsData extends EventContextData
+class EventFightActionChosen extends EventContextData
 {
     public function __construct(array $data)
     {
-        if (!isset($data["groups"])) {
-            throw new ArgumentException("Array field 'groups' is required.");
+        if (!isset($data["viewpoint"])) {
+            throw new ArgumentException("Array field 'viewpoint' is required.");
+        } elseif ($data["viewpoint"] instanceof Viewpoint === false) {
+            throw new ArgumentException("Array field 'viewpoint' must be an instance of LotGD\\Core\\Model\\Viewpoint.");
         }
 
         if (!isset($data["battle"])) {
@@ -32,6 +35,18 @@ class EventFightActionsData extends EventContextData
             throw new ArgumentException("Array field 'battleIdentifier' is required.");
         } elseif (is_string($data["battleIdentifier"]) === false) {
             throw new ArgumentException("Array field 'battleIdentifier' must be a string.");
+        }
+
+        if (!isset($data["actionParameter"])) {
+            throw new ArgumentException("Array field 'actionParameter' is required.");
+        } elseif (is_string($data["actionParameter"]) === false) {
+            throw new ArgumentException("Array field 'actionParameter' must be a string.");
+        }
+
+        if (!isset($data["blockNormalFightProcessing"])) {
+            throw new ArgumentException("Array field 'blockNormalFightProcessing' is required.");
+        } elseif (is_bool($data["blockNormalFightProcessing"]) === false) {
+            throw new ArgumentException("Array field 'blockNormalFightProcessing' must be a boolean.");
         }
 
         parent::__construct($data);

@@ -90,5 +90,5 @@ event_subscriptions:
     library: "lotgd/module-res-fight"
   -
     pattern: "#h/*#"
-    class: "LotGD\\Module\\Res\\Fight\\Tests\\helpers\\EventRegistrator"
+    class: "LotGD\\Module\\Res\\Fight\\Tests\\helpers\\EventRegistry"
     library: "lotgd/module-res-fight"
