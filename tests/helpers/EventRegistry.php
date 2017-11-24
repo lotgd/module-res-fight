@@ -8,7 +8,7 @@ use Doctrine\Common\Util\Debug;
 use LotGD\Core\Events\EventContext;
 use LotGD\Core\Game;
 
-class EventRegistrator
+class EventRegistry
 {
     public static $registration = [];
     public static $reactions = [];

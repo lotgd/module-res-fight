@@ -11,7 +11,7 @@ use LotGD\Core\Models\Viewpoint;
 use LotGD\Module\NewDay\Module as NewDayModule;
 use LotGD\Module\Res\Fight\Module as FightModule;
 use LotGD\Module\Res\Fight\Fight;
-use LotGD\Module\Res\Fight\Tests\helpers\EventRegistrator;
+use LotGD\Module\Res\Fight\Tests\helpers\EventRegistry;
 
 class FightHelperTest extends ModuleTestCase
 {
@@ -98,11 +98,11 @@ class FightHelperTest extends ModuleTestCase
         $fight->showFightActions();
 
         // Check if EventRegistrator registered the fightAction Hook
-        $this->assertSame(1, EventRegistrator::$registration[FightModule::HookFightActions]);
+        $this->assertSame(1, EventRegistry::$registration[FightModule::HookFightActions]);
 
         // Register an a reaction for the afterBattle hook before it actually happens.
         $works = False;
-        EventRegistrator::reactOn(FightModule::HookAfterBattle, function ($game, $context) use (&$works, $villageSceneId) {
+        EventRegistry::reactOn(FightModule::HookAfterBattle, function ($game, $context) use (&$works, $villageSceneId) {
             $sceneId = $context->getDataField("referrerSceneId");
             $battleIdentifier = $context->getDataField("battleIdentifier");
 
@@ -117,8 +117,8 @@ class FightHelperTest extends ModuleTestCase
 
         // Validate if the AfterBattle hook works properly
         $this->assertTrue($works);
-        $this->assertSame(1, EventRegistrator::$registration[FightModule::HookAfterBattle]);
+        $this->assertSame(1, EventRegistry::$registration[FightModule::HookAfterBattle]);
 
-        EventRegistrator::reset();
+        EventRegistry::reset();
     }
 }
