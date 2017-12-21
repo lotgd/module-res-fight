@@ -116,8 +116,9 @@ class Module implements ModuleInterface {
      * Adds experience to a character based on the enemy and the level difference between the character and the enemy.
      * @param Character $character
      * @param BasicEnemy $enemy
+     * @return int Experience gained.
      */
-    public static function characterEarnExperience(Character $character, BasicEnemy $enemy): void
+    public static function characterEarnExperience(Character $character, BasicEnemy $enemy): int
     {
         $experienceTable = [
             1 => 14,
@@ -153,15 +154,17 @@ class Module implements ModuleInterface {
             $modifier = 0.1*$levelDifference;
         }
 
-        $experience = $experience*$modifier;;
+        $experience = (int)round($experience*$modifier);
         if ($experience <= 0) {
             $experience = 1;
         }
 
         $character->setProperty(
             self::CharacterPropertyCurrentExperience,
-            $character->getProperty(self::CharacterPropertyCurrentExperience, 0) + (int)round($experience)
+            $character->getProperty(self::CharacterPropertyCurrentExperience, 0) + $experience
         );
+
+        return $experience;
     }
 
     /**

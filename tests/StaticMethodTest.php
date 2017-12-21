@@ -60,11 +60,13 @@ class StaticMethodTest extends ModuleTestCase
                 $monster = $this->getMonsterMock($j);
 
                 $character->setProperty(ResFightModule::CharacterPropertyCurrentExperience, 0);
-                ResFightModule::characterEarnExperience($character, $monster);
+                $experienceEarned = ResFightModule::characterEarnExperience($character, $monster);
 
                 $this->assertGreaterThan(0, $character->getProperty(ResFightModule::CharacterPropertyCurrentExperience),
                     sprintf("Assertion greater than failed with character level %s and monster level %s", $i, $j)
                 );
+
+                $this->assertSame($experienceEarned, $character->getProperty(ResFightModule::CharacterPropertyCurrentExperience));
 
                 unset($character, $monster);
             }
