@@ -5,6 +5,8 @@ namespace LotGD\Module\Res\Fight;
 
 use LotGD\Core\Game;
 use LotGD\Core\Events\EventContext;
+use LotGD\Core\Models\BasicEnemy;
+use LotGD\Core\Models\Character;
 use LotGD\Core\Models\Scene;
 use LotGD\Core\Module as ModuleInterface;
 use LotGD\Core\Models\Module as ModuleModel;
@@ -15,6 +17,8 @@ class Module implements ModuleInterface {
 
     const CharacterPropertyBattleState = self::ModuleIdentifier . "/battleState";
     const CharacterPropertyTurns = self::ModuleIdentifier . "/turns";
+    const CharacterPropertyCurrentExperience = self::ModuleIdentifier . "/experience";
+    const CharacterPropertyNeededExperience = self::ModuleIdentifier . "/experienceForLevelUp";
 
     const HookBattleOver = "h/" . self::ModuleIdentifier . "/battleOver";
     const HookSelectAction = "h/" . self::ModuleIdentifier . "/fightSelectAction";
@@ -106,6 +110,123 @@ class Module implements ModuleInterface {
         }
 
         return $context;
+    }
+
+    /**
+     * Adds experience to a character based on the enemy and the level difference between the character and the enemy.
+     * @param Character $character
+     * @param BasicEnemy $enemy
+     */
+    public static function characterEarnExperience(Character $character, BasicEnemy $enemy): void
+    {
+        $experienceTable = [
+            1 => 14,
+            2 => 24,
+            3 => 34,
+            4 => 45,
+            5 => 55,
+            6 => 66,
+            7 => 77,
+            8 => 89,
+            9 => 101,
+            10 => 114,
+            11 => 127,
+            12 => 141,
+            13 => 135,
+            14 => 172,
+            15 => 189,
+            16 => 207,
+            17 => 223,
+            18 => 249,
+        ];
+        $levelDifference = $enemy->getLevel() - $character->getLevel();
+
+        if (isset($experienceTable[$enemy->getLevel()])) {
+            $experience = $experienceTable[$enemy->getLevel()];
+        } else {
+            $experience = 0;
+        }
+
+        if ($levelDifference < 0) {
+            $modifier = -0.25*$levelDifference;
+        } else {
+            $modifier = 0.1*$levelDifference;
+        }
+
+        $experience = $experience*$modifier;;
+        if ($experience <= 0) {
+            $experience = 1;
+        }
+
+        $character->setProperty(
+            self::CharacterPropertyCurrentExperience,
+            $character->getProperty(self::CharacterPropertyCurrentExperience, 0) + (int)round($experience)
+        );
+    }
+
+    /**
+     * Levels up the given character and sets the new experience he needs for the next level.
+     *
+     * This method does not check if the experience requirement is fulfilled.
+     * @param Character $c
+     */
+    public static function characterLevelUp(Character $c): void
+    {
+        if ($c->getLevel() < 15) {
+            $c->setLevel($c->getLevel() + 1);
+            $c->setProperty(self::CharacterPropertyNeededExperience, self::getNeededExperienceByLevel($c->getLevel()));
+        }
+    }
+
+    /**
+     * Helper method to return the needed base experience by a given level.
+     * @param int $level
+     * @return int
+     */
+    public static function getNeededExperienceByLevel(int $level): int
+    {
+        // @ToDo: Add hook for additional scaling.
+        $experienceArray = [
+            1 => 100,
+            2 => 400,
+            3 => 1002,
+            4 => 1912,
+            5 => 3140,
+            6 => 4707,
+            7 => 6641,
+            8 => 8985,
+            9 => 11795,
+            10 => 15143,
+            11 => 19121,
+            12 => 23840,
+            13 => 29437,
+            14 => 36071,
+            15 => 43930
+        ];
+
+        if ($level > count($experienceArray)) {
+            $level = count($experienceArray);
+        } elseif ($level < min(array_keys($experienceArray))) {
+            $level = min(array_keys($experienceArray));
+        }
+
+        return $experienceArray[$level] ?: 0;
+    }
+
+    /**
+     * Returns true if the character has enough experience for a level up.
+     * @param Character $c
+     * @return bool
+     */
+    public static function characterHasNeededExperience(Character $c): bool
+    {
+        $currentExp = $c->getProperty(self::CharacterPropertyCurrentExperience);
+        $neededExp = $c->getProperty(self::CharacterPropertyNeededExperience, self::getNeededExperienceByLevel($c->getLevel()));
+        if ($currentExp >= $neededExp) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public static function onRegister(Game $g, ModuleModel $module)
