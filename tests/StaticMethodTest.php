@@ -34,6 +34,22 @@ class StaticMethodTest extends ModuleTestCase
                     return $default;
                 }
             }
+            public function getMaxHealth(): int
+            {
+                if (!isset($this->_maxHealth)) {
+                    $this->_maxHealth = $this->_level * 10;
+                }
+                return $this->_maxHealth;
+            }
+            public function setMaxHealth(int $maxHealth){$this->_maxHealth = $maxHealth;}
+            public function getHealth(): int
+            {
+                if (!isset($this->_health)) {
+                    $this->_health = $this->_maxHealth;
+                }
+                return $this->_health;
+            }
+            public function setHealth(int $health) {$this->_health = $health;}
         };
 
         return $character;
@@ -77,9 +93,14 @@ class StaticMethodTest extends ModuleTestCase
     {
         for ($i = 1; $i < 15; $i++) {
             $character = $this->getCharacterMock($i);
+            $maxHealthBeforeLevelUp = $character->getMaxHealth();
+            $healthBeforeLevelUp = $character->getHealth();
             ResFightModule::characterLevelUp($character);
             $this->assertSame($i+1, $character->getLevel());
             $this->assertGreaterThan(0, $character->getProperty(ResFightModule::CharacterPropertyNeededExperience, 0));
+            $this->assertGreaterThan($maxHealthBeforeLevelUp, $character->getMaxHealth());
+            $this->assertGreaterThan($healthBeforeLevelUp, $character->getHealth());
+            $this->assertSame($character->getHealth(), $character->getMaxHealth());
         }
 
         // Level 15 characters are not allowed to level up.

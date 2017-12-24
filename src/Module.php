@@ -178,6 +178,10 @@ class Module implements ModuleInterface {
         if ($c->getLevel() < 15) {
             $c->setLevel($c->getLevel() + 1);
             $c->setProperty(self::CharacterPropertyNeededExperience, self::getNeededExperienceByLevel($c->getLevel()));
+
+            $c->setMaxHealth($c->getMaxHealth() + 10);
+            $c->setHealth($c->getMaxHealth());
+            // @ToDo: Add hook for additional "happens on level up"
         }
     }
 
