@@ -6,6 +6,7 @@ namespace LotGD\Module\Res\Fight\Tests;
 use LotGD\Core\Models\BasicEnemy;
 use LotGD\Core\Models\Character;
 use LotGD\Core\Tools\Model\AutoScaleFighter;
+use LotGD\Module\Res\Fight\Models\CharacterResFightExtension;
 use LotGD\Module\Res\Fight\Module as ResFightModule;
 
 class StaticMethodTest extends ModuleTestCase
@@ -25,7 +26,7 @@ class StaticMethodTest extends ModuleTestCase
             public function __construct($level) {$this->_level = $level;}
             public function getLevel(): int {return $this->_level;}
             public function setLevel(int $level): void {$this->_level = $level;}
-            public function setProperty(string $name, $value) { $this->_properties[$name] = $value; }
+            public function setProperty(string $name, $value): void { $this->_properties[$name] = $value; }
             public function getProperty(string $name, $default = null)
             {
                 if (isset($this->_properties[$name])) {
@@ -76,13 +77,13 @@ class StaticMethodTest extends ModuleTestCase
                 $monster = $this->getMonsterMock($j);
 
                 $character->setProperty(ResFightModule::CharacterPropertyCurrentExperience, 0);
-                $experienceEarned = ResFightModule::characterEarnExperience($character, $monster);
+                CharacterResFightExtension::rewardExperienceToCharacter($character, 100);
 
                 $this->assertGreaterThan(0, $character->getProperty(ResFightModule::CharacterPropertyCurrentExperience),
                     sprintf("Assertion greater than failed with character level %s and monster level %s", $i, $j)
                 );
 
-                $this->assertSame($experienceEarned, $character->getProperty(ResFightModule::CharacterPropertyCurrentExperience));
+                $this->assertSame(100, $character->getProperty(ResFightModule::CharacterPropertyCurrentExperience));
 
                 unset($character, $monster);
             }
@@ -95,9 +96,9 @@ class StaticMethodTest extends ModuleTestCase
             $character = $this->getCharacterMock($i);
             $maxHealthBeforeLevelUp = $character->getMaxHealth();
             $healthBeforeLevelUp = $character->getHealth();
-            ResFightModule::characterLevelUp($character);
+            CharacterResFightExtension::levelUpCharacter($character, $this->g);
             $this->assertSame($i+1, $character->getLevel());
-            $this->assertGreaterThan(0, $character->getProperty(ResFightModule::CharacterPropertyNeededExperience, 0));
+            $this->assertGreaterThan(0, $character->getProperty(ResFightModule::CharacterPropertyRequiredExperience, 0));
             $this->assertGreaterThan($maxHealthBeforeLevelUp, $character->getMaxHealth());
             $this->assertGreaterThan($healthBeforeLevelUp, $character->getHealth());
             $this->assertSame($character->getHealth(), $character->getMaxHealth());
@@ -105,38 +106,40 @@ class StaticMethodTest extends ModuleTestCase
 
         // Level 15 characters are not allowed to level up.
         $character = $this->getCharacterMock(15);
-        ResFightModule::characterLevelUp($character);
+        CharacterResFightExtension::levelUpCharacter($character, $this->g);
         $this->assertSame(15, $character->getLevel());
     }
 
     public function testGetNeededExperienceByLevel()
     {
         for ($i = 1; $i <= 15; $i++) {
-            $this->assertGreaterThan(0, ResFightModule::getNeededExperienceByLevel($i));
+            $character = $this->getCharacterMock($i);
+            $this->assertGreaterThan(0, CharacterResFightExtension::calculateNeededExperienceForCharacter($character, $this->g));
         }
     }
 
     public function testCharacterHasNeededExperience()
     {
         for ($i = 1; $i <=  15; $i++) {
-            $neededExperience = ResFightModule::getNeededExperienceByLevel($i);
+            $character = $this->getCharacterMock($i);
+            $neededExperience = CharacterResFightExtension::calculateNeededExperienceForCharacter($character, $this->g);
             $character = $this->getCharacterMock($i);
 
             // Not enough
             $character->setProperty(ResFightModule::CharacterPropertyCurrentExperience, 0);
-            $this->assertFalse(ResFightModule::characterHasNeededExperience($character));
+            $this->assertFalse(CharacterResFightExtension::characterHasRequiredExperience($character, $this->g));
 
             // Just not enough
             $character->setProperty(ResFightModule::CharacterPropertyCurrentExperience, $neededExperience-1);
-            $this->assertFalse(ResFightModule::characterHasNeededExperience($character));
+            $this->assertFalse(CharacterResFightExtension::characterHasRequiredExperience($character, $this->g));
 
             // Barely enough
             $character->setProperty(ResFightModule::CharacterPropertyCurrentExperience, $neededExperience);
-            $this->assertTrue(ResFightModule::characterHasNeededExperience($character));
+            $this->assertTrue(CharacterResFightExtension::characterHasRequiredExperience($character, $this->g));
 
             // More than enough
             $character->setProperty(ResFightModule::CharacterPropertyCurrentExperience, $neededExperience*2);
-            $this->assertTrue(ResFightModule::characterHasNeededExperience($character));
+            $this->assertTrue(CharacterResFightExtension::characterHasRequiredExperience($character, $this->g));
         }
     }
 }

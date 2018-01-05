@@ -47,5 +47,5 @@ Number of turns left; Gets regenerated upon a new day.
 - `lotgd/module-res-fight/experience` (`Module::CharacterPropertyCurrentExperience`)
 Amount of experience the character currently has.
 
-- `lotgd/module-res-fight/experienceForLevelUp` (`Module::CharacterPropertyNeededExperience`)
+- `lotgd/module-res-fight/experienceForLevelUp` (`Module::CharacterPropertyRequiredExperience`)
 Amount of experience the character currently needs to challenge his master.
