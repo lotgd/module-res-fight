@@ -142,4 +142,14 @@ class StaticMethodTest extends ModuleTestCase
             $this->assertTrue(CharacterResFightExtension::characterHasRequiredExperience($character, $this->g));
         }
     }
+
+    public function testModifyRelativeExperienceFromCharacter()
+    {
+        $character = $this->getCharacterMock(5);
+        $character->setProperty(ResFightModule::CharacterPropertyCurrentExperience, 100);
+
+        CharacterResFightExtension::modifyRelativeExperienceFromCharacter($character, 0.9);
+
+        $this->assertSame(90, $character->getProperty(ResFightModule::CharacterPropertyCurrentExperience, null));
+    }
 }

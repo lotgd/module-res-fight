@@ -108,7 +108,7 @@ class CharacterResFightExtension
     {
         $character->setProperty(
             ResFightModule::CharacterPropertyCurrentExperience,
-            (int)floor($character->getProperty(ResFightModule::CharacterPropertyCurrentExperience, 0) * $factor, 0)
+            (int)floor($character->getProperty(ResFightModule::CharacterPropertyCurrentExperience, 0) * $factor)
         );
     }
 
