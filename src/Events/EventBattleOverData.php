@@ -1,30 +1,33 @@
 <?php
 declare(strict_types=1);
 
-namespace LotGD\Module\Res\Fight;
+namespace LotGD\Module\Res\Fight\Events;
 
 use LotGD\Core\Battle;
 use LotGD\Core\Events\EventContextData;
 use LotGD\Core\Exceptions\ArgumentException;
+use LotGD\Core\Models\Viewpoint;
 
 /**
- * Class EventFightActionsData
+ * Class EventBattleOverData
  *
- * EventContextData for HookSelectAction
+ * Contains data if the fight event is over.
  * @package LotGD\Module\Res\Fight
  */
-class EventFightActionsData extends EventContextData
+class EventBattleOverData extends EventContextData
 {
     public function __construct(array $data)
     {
-        if (!isset($data["groups"])) {
-            throw new ArgumentException("Array field 'groups' is required.");
-        }
-
         if (!isset($data["battle"])) {
             throw new ArgumentException("Array field 'battle' is required.");
         } elseif ($data["battle"] instanceof Battle === false) {
             throw new ArgumentException("Array field 'battle' must be an instance of LotGD\\Core\\Battle.");
+        }
+
+        if (!isset($data["viewpoint"])) {
+            throw new ArgumentException("Array field 'viewpoint' is required.");
+        } elseif ($data["viewpoint"] instanceof Viewpoint === false) {
+            throw new ArgumentException("Array field 'viewpoint' must be an instance of LotGD\\Core\\Models\\Viewpoint.");
         }
 
         if (!isset($data["referrerSceneId"])) {
@@ -37,12 +40,6 @@ class EventFightActionsData extends EventContextData
             throw new ArgumentException("Array field 'battleIdentifier' is required.");
         } elseif (is_string($data["battleIdentifier"]) === false) {
             throw new ArgumentException("Array field 'battleIdentifier' must be a string.");
-        }
-
-        if (!isset($data["createActionCallback"])) {
-            throw new ArgumentException("Array field 'createActionCallback' is required.");
-        } elseif (is_callable($data["createActionCallback"]) === false) {
-            throw new ArgumentException("Array field 'createActionCallback' must be a string.");
         }
 
         parent::__construct($data);

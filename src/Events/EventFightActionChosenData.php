@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LotGD\Module\Res\Fight;
+namespace LotGD\Module\Res\Fight\Events;
 
 
 use LotGD\Core\Battle;
@@ -15,7 +15,7 @@ use LotGD\Core\Models\Viewpoint;
  * EventContextData container for HookFightActionChosen
  * @package LotGD\Module\Res\Fight
  */
-class EventFightActionChosen extends EventContextData
+class EventFightActionChosenData extends EventContextData
 {
     public function __construct(array $data)
     {

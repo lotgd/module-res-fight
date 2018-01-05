@@ -11,6 +11,7 @@ use LotGD\Core\Models\Scene;
 use LotGD\Core\Module as ModuleInterface;
 use LotGD\Core\Models\Module as ModuleModel;
 use LotGD\Module\NewDay\Module as NewDayModule;
+use LotGD\Module\Res\Fight\Events\EventBattleOverData;
 
 class Module implements ModuleInterface {
     const ModuleIdentifier = "lotgd/module-res-fight";

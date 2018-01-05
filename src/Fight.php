@@ -10,6 +10,8 @@ use LotGD\Core\Game;
 use LotGD\Core\Models\FighterInterface;
 use LotGD\Core\Models\Scene;
 use LotGD\Module\Res\Fight\Module as FightModule;
+use LotGD\Module\Res\Fight\Events\EventFightActionsData;
+use LotGD\Module\Res\Fight\Events\EventFightActionChosenData;
 
 class Fight
 {
@@ -191,7 +193,7 @@ class Fight
         // Event to modify action groups. Must put battle and scene into event context. Character is in global context.
         $hookData = $this->game->getEventManager()->publish(
             FightModule::HookActionChosen,
-            new EventFightActionChosen([
+            new EventFightActionChosenData([
                 "viewpoint" => $v,
                 "actionParameter" => $parameters[self::ActionParameterField],
                 "battle" => $this->battle,
