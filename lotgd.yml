@@ -2,3 +2,5 @@ entityNamespace: "LotGD\\Module\\Res\\Fight\\"
 subscriptionPatterns:
   - "#h/lotgd/module-new-day/after#"
   - "#h/lotgd/core/navigate-to/lotgd/module-new-day/battle#"
+modelExtensions:
+  - "LotGD\\Module\\Res\\Fight\\Models\\CharacterResFightExtension"

@@ -9,10 +9,13 @@ use LotGD\Core\Game;
 use LotGD\Core\Models\Character;
 
 use LotGD\Module\Res\Fight\Module as ResFightModule;
+use LotGD\Core\Doctrine\Annotations\Extension;
+use LotGD\Core\Doctrine\Annotations\ExtensionMethod;
 
 /**
  * API extension helpers for the character model
  * @package LotGD\Module\Res\Fight\Models
+ * @Extension(of="LotGD\Core\Models\Character")
  */
 class CharacterResFightExtension
 {
@@ -40,9 +43,9 @@ class CharacterResFightExtension
      * This method levels up characters with a level < 15. It increases their max health by 10 points and heals them.
      * It also adjusts the needed experience and throws an event.
      * @param Character $character
-     * @param Game $g
+     * @ExtensionMethod(as="levelUp")
      */
-    public static function levelUpCharacter(Character $character, Game $g): void
+    public static function levelUpCharacter(Character $character): void
     {
         if ($character->getLevel() < 15) {
             // Increment level by 1
@@ -55,13 +58,13 @@ class CharacterResFightExtension
             // Adjust needed experience
             $character->setProperty(
                 ResFightModule::CharacterPropertyRequiredExperience,
-                    self::calculateNeededExperienceForCharacter($character, $g)
+                    self::calculateNeededExperienceForCharacter($character)
             );
 
             // Call event
-            $g->getEventManager()->publish(
+            $character->getGame()->getEventManager()->publish(
                 ResFightModule::EventCharacterLevelUp,
-                CharacterEventData::create(["character" => $character])
+                CharacterEventData::create(["character" => $character, "value" => null])
             );
         }
     }
@@ -69,10 +72,10 @@ class CharacterResFightExtension
     /**
      * Returns the amount of experience needed for a character
      * @param Character $character
-     * @param Game $g
      * @return int
+     * @ExtensionMethod(as="calculateNeededExperience")
      */
-    public static function calculateNeededExperienceForCharacter(Character $character, Game $g): int
+    public static function calculateNeededExperienceForCharacter(Character $character): int
     {
         // @ToDo: Add hook for additional scaling.
         $level = $character->getLevel();
@@ -90,6 +93,7 @@ class CharacterResFightExtension
      * Increments the current experience of a character by a given amount.
      * @param Character $character
      * @param int $experience
+     * @ExtensionMethod(as="rewardExperience")
      */
     public static function rewardExperienceToCharacter(Character $character, int $experience): void
     {
@@ -103,6 +107,7 @@ class CharacterResFightExtension
      * Adjusts the experience of a character by a given factor.
      * @param Character $character
      * @param float $factor
+     * @ExtensionMethod(as="multiplyExperience")
      */
     public static function modifyRelativeExperienceFromCharacter(Character $character, float $factor): void
     {
@@ -116,11 +121,12 @@ class CharacterResFightExtension
      * Returns true if the character has enough experience for a level up.
      * @param Character $c
      * @return bool
+     * @ExtensionMethod(as="hasRequiredExperience")
      */
-    public static function characterHasRequiredExperience(Character $c, Game $g): bool
+    public static function characterHasRequiredExperience(Character $c): bool
     {
         $currentExp = self::getCurrentExperienceForCharacter($c);
-        $requiredExp = self::getRequiredExperienceForCharacter($c, $g);
+        $requiredExp = self::getRequiredExperienceForCharacter($c);
 
         if ($currentExp >= $requiredExp) {
             return true;
@@ -133,16 +139,18 @@ class CharacterResFightExtension
      * Returns the required experience for a given character.
      * @param Character $c
      * @return int
+     * @ExtensionMethod(as="getRequiredExperience")
      */
-    public static function getRequiredExperienceForCharacter(Character $c, Game $g): int
+    public static function getRequiredExperienceForCharacter(Character $c): int
     {
-        return $c->getProperty(ResFightModule::CharacterPropertyRequiredExperience, self::calculateNeededExperienceForCharacter($c, $g));
+        return $c->getProperty(ResFightModule::CharacterPropertyRequiredExperience, self::calculateNeededExperienceForCharacter($c));
     }
 
     /**
      * Sets the required for a given character.
      * @param Character $c
      * @param int $experience
+     * @ExtensionMethod(as="setRequiredExperience")
      */
     public static function setRequiredExperienceForCharacter(Character $c, int $experience): void
     {
@@ -153,6 +161,7 @@ class CharacterResFightExtension
      * Returns the current experience for a given character.
      * @param Character $c
      * @return int
+     * @ExtensionMethod(as="getCurrentExperience")
      */
     public static function getCurrentExperienceForCharacter(Character $c): int
     {
@@ -163,9 +172,45 @@ class CharacterResFightExtension
      * Sets the current experience for a given character.
      * @param Character $c
      * @param int $experience
+     * @ExtensionMethod(as="setCurrentExperience")
      */
     public static function setCurrentExperienceForCharacter(Character $c, int $experience): void
     {
         $c->setProperty(ResFightModule::CharacterPropertyCurrentExperience, $experience);
+    }
+
+    /**
+     * Increments the turns a character has by a given amount.
+     * @param Character $c
+     * @param int $increment
+     * @ExtensionMethod(as="incrementTurns")
+     */
+    public static function incrementTurnsForCharacter(Character $c, int $increment): void
+    {
+        $c->setProperty(
+            ResFightModule::CharacterPropertyTurns,
+            $c->getProperty(ResFightModule::CharacterPropertyTurns, 30) + $increment
+        );
+    }
+
+    /**
+     * Returns the number of turns a character has left.
+     * @param Character $c
+     * @return int
+     * @ExtensionMethod(as="getTurns")
+     */
+    public static function getTurnsLeftForCharacter(Character $c): int
+    {
+        return $c->getProperty(ResFightModule::CharacterPropertyTurns, 30);
+    }
+
+    /**
+     * @param Character $c
+     * @param int $turns
+     * @ExtensionMethod(as="setTurns")
+     */
+    public static function setTurnsLeftForCharacter(Character $c, int $turns): void
+    {
+        $c->setProperty(ResFightModule::CharacterPropertyTurns, $turns);
     }
 }

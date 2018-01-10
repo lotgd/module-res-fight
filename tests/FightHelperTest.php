@@ -5,11 +5,37 @@ namespace LotGD\Module\Res\Fight\Tests;
 use DateTime;
 use LotGD\Core\Game;
 use LotGD\Core\Models\Character;
+use LotGD\Core\Models\FighterInterface;
+use LotGD\Core\Models\Monster;
 use LotGD\Core\Models\Scene;
+use LotGD\Core\Tools\Model\AutoScaleFighter;
 use LotGD\Module\NewDay\Module as NewDayModule;
 use LotGD\Module\Res\Fight\Module as FightModule;
 use LotGD\Module\Res\Fight\Fight;
 use LotGD\Module\Res\Fight\Tests\helpers\EventRegistry;
+
+class EnemyFighter implements FighterInterface {
+    use AutoScaleFighter;
+    private $name;
+    private $level;
+    private $health;
+
+    public function __construct(string $name, int $level)
+    {
+        $this->name = $name;
+        $this->level = $level;
+        $this->health = $this->getMaxHealth();
+    }
+
+    public function getDisplayName(): string {return $this->name;}
+    public function getName(): string {return $this->name;}
+    public function getLevel(): int {return $this->level;}
+    public function getHealth(): int {return $this->health;}
+    public function setHealth(int $amount): void {$this->health = $amount;}
+    public function heal(int $heal): void {$this->health += $heal;}
+    public function damage(int $damage): void {$this->health -= $damage;}
+    public function isAlive(): bool {return $this->health > 0;}
+}
 
 class FightHelperTest extends ModuleTestCase
 {
@@ -39,7 +65,7 @@ class FightHelperTest extends ModuleTestCase
     public function testIfFightSequenceWorksProperly()
     {
         $this->preloadGameConditions(6);
-        $enemy = $this->getEntityManager()->getRepository(Character::class)->find(7);
+        $enemy = new EnemyFighter("Paper Warrior", 1);
         $this->getEntityManager()->detach($enemy);
 
         $villageScene = $this->getEntityManager()->getRepository(Scene::class)->find(1);
@@ -88,7 +114,7 @@ class FightHelperTest extends ModuleTestCase
     public function testIfFightHooksAreCalled()
     {
         $this->preloadGameConditions(8);
-        $enemy = $this->getEntityManager()->getRepository(Character::class)->find(7);
+        $enemy = new EnemyFighter("Paper Warrior", 1);
         $this->getEntityManager()->detach($enemy);
         $villageScene = $this->getEntityManager()->getRepository(Scene::class)->find(1);
         $villageSceneId = $villageScene->getId();

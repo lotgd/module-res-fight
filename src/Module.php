@@ -65,7 +65,7 @@ class Module implements ModuleInterface {
             );
         }
 
-        $g->getCharacter()->setProperty(self::CharacterPropertyTurns, $turns);
+        $g->getCharacter()->setTurns($turns);
         $g->getCharacter()->setHealth($g->getCharacter()->getMaxHealth());
 
         return $context;
