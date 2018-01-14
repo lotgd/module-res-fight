@@ -63,7 +63,7 @@ Adds the given number of turns to the character.
 - `getTurns(): int`\
 Returns the current number of turns left.
 
-- `incrementTurns(int $numberOfTurns)`\
+- `setTurns(int $numberOfTurns)`\
 Sets the current number of turns left.
 
 ### Character Properties

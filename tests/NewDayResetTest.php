@@ -48,6 +48,7 @@ class NewDayResetTest extends ModuleTestCase
         $descriptions = explode("\n\n", $v->getDescription());
         $this->assertContains("You feel energized! Today, you can fight for 20 rounds.", $descriptions);
         $this->assertSame($character->getMaxHealth(), $character->getHealth());
+        $this->assertSame(20, $character->getTurns());
     }
 
     public function testNewDayEventFoDeadCharacter()
@@ -68,5 +69,6 @@ class NewDayResetTest extends ModuleTestCase
         $descriptions = explode("\n\n", $v->getDescription());
         $this->assertContains("You are back from the dead. Since you died yesterday, you can only fight for 15 rounds today.", $descriptions);
         $this->assertSame($character->getMaxHealth(), $character->getHealth());
+        $this->assertSame(15, $character->getTurns());
     }
 }
