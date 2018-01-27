@@ -212,11 +212,22 @@ class Fight
             }
         }
 
-        $events = $this->battle->getEvents();
+        $v->addDescriptionParagraph(sprintf("You are fighting against %s (level %s) who has %s hitpoints left.",
+            $this->battle->getMonster()->getDisplayName(),
+            $this->battle->getMonster()->getLevel(),
+            $this->battle->getMonster()->getHealth()
+        ));
 
+        $events = $this->battle->getEvents();
         foreach ($events as $event) {
             $v->addDescriptionParagraph($event->decorate($this->game));
         }
+
+        $v->addDescriptionParagraph(sprintf("%s (level %s) now has %s hitpoints left.",
+            $this->battle->getMonster()->getDisplayName(),
+            $this->battle->getMonster()->getLevel(),
+            $this->battle->getMonster()->getHealth()
+        ));
     }
 
     /**
