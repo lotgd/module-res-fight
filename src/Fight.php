@@ -71,7 +71,7 @@ class Fight
      * Returns the id of the scene that started the fight.
      * @return int
      */
-    public function getReferrerSceneId(): int
+    public function getReferrerSceneId(): string
     {
         return $this->data["sceneId"];
     }

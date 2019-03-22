@@ -64,11 +64,11 @@ class FightHelperTest extends ModuleTestCase
 
     public function testIfFightSequenceWorksProperly()
     {
-        $this->preloadGameConditions(6);
+        $this->preloadGameConditions("10000000-0000-0000-0000-000000000006");
         $enemy = new EnemyFighter("Paper Warrior", 1);
         $this->getEntityManager()->detach($enemy);
 
-        $villageScene = $this->getEntityManager()->getRepository(Scene::class)->find(1);
+        $villageScene = $this->getEntityManager()->getRepository(Scene::class)->find("20000000-0000-0000-0000-000000000001");
         $fight = Fight::start($this->g, $enemy, $villageScene, "test-battle");
 
         // Without anything done by showFightActions, this array should have default and hidden group.
@@ -113,10 +113,10 @@ class FightHelperTest extends ModuleTestCase
 
     public function testIfFightHooksAreCalled()
     {
-        $this->preloadGameConditions(8);
+        $this->preloadGameConditions("10000000-0000-0000-0000-000000000008");
         $enemy = new EnemyFighter("Paper Warrior", 1);
         $this->getEntityManager()->detach($enemy);
-        $villageScene = $this->getEntityManager()->getRepository(Scene::class)->find(1);
+        $villageScene = $this->getEntityManager()->getRepository(Scene::class)->find("20000000-0000-0000-0000-000000000001");
         $villageSceneId = $villageScene->getId();
         $fight = Fight::start($this->g, $enemy, $villageScene, "test-battle");
         $fight->showFightActions();

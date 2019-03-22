@@ -32,8 +32,6 @@ class EventBattleOverData extends EventContextData
 
         if (!isset($data["referrerSceneId"])) {
             throw new ArgumentException("Array field 'referrerSceneId' is required.");
-        } elseif (is_int($data["referrerSceneId"]) === false) {
-            throw new ArgumentException("Array field 'referrerSceneId' must be an integer (and a valid scene id).");
         }
 
         if (!isset($data["battleIdentifier"])) {

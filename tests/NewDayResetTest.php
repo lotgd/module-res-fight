@@ -37,7 +37,7 @@ class NewDayResetTest extends ModuleTestCase
         /** @var Game $game */
         $game = $this->g;
         /** @var Character $character */
-        $character = $this->getEntityManager()->getRepository(Character::class)->findById(1)[0];
+        $character = $this->getEntityManager()->getRepository(Character::class)->findById("10000000-0000-0000-0000-000000000001")[0];
         $game->setCharacter($character);
         $v = $game->getViewpoint();
 
@@ -56,7 +56,7 @@ class NewDayResetTest extends ModuleTestCase
         /** @var Game $game */
         $game = $this->g;
         /** @var Character $character */
-        $character = $this->getEntityManager()->getRepository(Character::class)->findById(4)[0];
+        $character = $this->getEntityManager()->getRepository(Character::class)->findById("10000000-0000-0000-0000-000000000004")[0];
         $game->setCharacter($character);
         $this->assertSame(0, $character->getHealth());
 
