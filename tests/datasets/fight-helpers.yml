@@ -23,6 +23,14 @@ characters:
     health: 200
     level: 20
     deletedAt:
+  -
+    id: "10000000-0000-0000-0000-000000000009"
+    name: "The Slayer 2"
+    displayName: "The Slayer 2"
+    maxHealth: 200
+    health: 200
+    level: 20
+    deletedAt:
 scenes:
     -
         id: "20000000-0000-0000-0000-000000000001"
