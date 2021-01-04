@@ -117,20 +117,30 @@ class Module implements ModuleInterface {
     
     public static function onRegister(Game $g, ModuleModel $module)
     {
+        $em = $g->getEntityManager();
+
         $battleScene = BattleScene::getScaffold();
 
-        $g->getEntityManager()->persist($battleScene);
-        $g->getEntityManager()->persist($battleScene->getTemplate());
+        $em->persist($battleScene);
+        $em->persist($battleScene->getTemplate());
     }
 
     public static function onUnregister(Game $g, ModuleModel $module)
     {
-        $sceneId = $module->getProperty(self::ModulePropertyBattleSceneId);
+        $em = $g->getEntityManager();
 
-        if ($sceneId !== null) {
-            $g->getEntityManager()->getRepository(Scene::class)->find($sceneId)->delete($g->getEntityManager());
+        // Get all scenes that use our SceneTemplates. As they are not user-assignable and don't make sense without the
+        // module itself, we will freely delete all of them.
+        $registeredScenes = $em->getRepository(Scene::class)->findBy([
+            "template" => BattleScene::class,
+        ]);
+
+        foreach ($registeredScenes as $scene) {
+            $template = $scene->getTemplate();
+
+            // We must remove the template and the scene.
+            $em->remove($template);
+            $em->remove($scene);
         }
-
-        $module->setProperty(self::ModulePropertyBattleSceneId, null);
     }
 }
