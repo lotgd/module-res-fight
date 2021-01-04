@@ -35,6 +35,11 @@ class ModuleTestCase extends ModelTestCase
         return Yaml::parseFile(implode(DIRECTORY_SEPARATOR, [__DIR__, 'datasets', 'module.yml']));
     }
 
+    public function getCwd(): string
+    {
+        return implode(DIRECTORY_SEPARATOR, [__DIR__, '..']);
+    }
+
     public function setUp(): void
     {
         parent::setUp();
