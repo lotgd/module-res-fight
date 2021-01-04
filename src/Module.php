@@ -12,6 +12,7 @@ use LotGD\Core\Module as ModuleInterface;
 use LotGD\Core\Models\Module as ModuleModel;
 use LotGD\Module\NewDay\Module as NewDayModule;
 use LotGD\Module\Res\Fight\Events\EventBattleOverData;
+use LotGD\Module\Res\Fight\SceneTemplates\BattleScene;
 
 class Module implements ModuleInterface {
     const ModuleIdentifier = "lotgd/module-res-fight";
@@ -116,16 +117,10 @@ class Module implements ModuleInterface {
     
     public static function onRegister(Game $g, ModuleModel $module)
     {
-        $battleScene = Scene::create([
-            "template" => self::SceneBattle,
-            "title" => "A fight!",
-            "description" => "You are fighting."
-        ]);
+        $battleScene = BattleScene::getScaffold();
 
         $g->getEntityManager()->persist($battleScene);
-        $g->getEntityManager()->flush();
-
-        $module->setProperty(self::ModulePropertyBattleSceneId, $battleScene->getId());
+        $g->getEntityManager()->persist($battleScene->getTemplate());
     }
 
     public static function onUnregister(Game $g, ModuleModel $module)
