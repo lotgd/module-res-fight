@@ -3,6 +3,7 @@
 namespace LotGD\Module\Res\Fight\Tests;
 
 use DateTime;
+use Symfony\Component\Yaml\Yaml;
 use LotGD\Core\Game;
 use LotGD\Core\Models\Character;
 use LotGD\Core\Models\FighterInterface;
@@ -10,6 +11,7 @@ use LotGD\Core\Models\Monster;
 use LotGD\Core\Models\Scene;
 use LotGD\Core\Tools\Model\AutoScaleFighter;
 use LotGD\Module\NewDay\Module as NewDayModule;
+
 use LotGD\Module\Res\Fight\Module as FightModule;
 use LotGD\Module\Res\Fight\Fight;
 use LotGD\Module\Res\Fight\Tests\helpers\EventRegistry;
@@ -41,9 +43,9 @@ class FightHelperTest extends ModuleTestCase
 {
     const Library = 'lotgd/module-res-fight';
 
-    protected function getDataSet(): \PHPUnit_Extensions_Database_DataSet_YamlDataSet
+    public function getDataSet(): array
     {
-        return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(implode(DIRECTORY_SEPARATOR, [__DIR__, 'datasets', 'fight-helpers.yml']));
+        return Yaml::parseFile(implode(DIRECTORY_SEPARATOR, [__DIR__, 'datasets', 'fight-helpers.yml']));
     }
 
     protected function preloadGameConditions($charid)

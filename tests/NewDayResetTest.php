@@ -5,9 +5,9 @@ namespace LotGD\Module\Res\Fight\Tests;
 
 use LotGD\Core\Events\EventContext;
 use LotGD\Core\Events\EventContextData;
-
 use LotGD\Core\Game;
 use LotGD\Core\Models\Character;
+use Symfony\Component\Yaml\Yaml;
 
 use LotGD\Module\Res\Fight\Module;
 
@@ -15,9 +15,9 @@ class NewDayResetTest extends ModuleTestCase
 {
     const Library = 'lotgd/module-res-fight';
 
-    protected function getDataSet(): \PHPUnit_Extensions_Database_DataSet_YamlDataSet
+    public function getDataSet(): array
     {
-        return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(implode(DIRECTORY_SEPARATOR, [__DIR__, 'datasets', 'module.yml']));
+        return Yaml::parseFile(implode(DIRECTORY_SEPARATOR, [__DIR__, 'datasets', 'module.yml']));
     }
 
     public function testHandleUnknownEvent()

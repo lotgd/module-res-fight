@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LotGD\Module\Res\Fight\Tests;
 
+use Symfony\Component\Yaml\Yaml;
 use LotGD\Core\Models\BasicEnemy;
 use LotGD\Core\Models\Character;
 use LotGD\Core\Tools\Model\AutoScaleFighter;
@@ -13,9 +14,9 @@ class StaticMethodTest extends ModuleTestCase
 {
     const Library = 'lotgd/module-res-fight';
 
-    protected function getDataSet(): \PHPUnit_Extensions_Database_DataSet_YamlDataSet
+    public function getDataSet(): array
     {
-        return new \PHPUnit_Extensions_Database_DataSet_YamlDataSet(implode(DIRECTORY_SEPARATOR, [__DIR__, 'datasets', 'module.yml']));
+        return Yaml::parseFile(implode(DIRECTORY_SEPARATOR, [__DIR__, 'datasets', 'module.yml']));
     }
 
     protected function getCharacterMock(int $level): Character
