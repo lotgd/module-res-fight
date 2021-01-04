@@ -23,6 +23,8 @@ class BattleScene implements SceneTemplateInterface
             "description" => "You are fighting."
         ]);
 
+        $battleScene->getTemplate()->setUserAssignable(false);
+
         return $battleScene;
     }
 }
