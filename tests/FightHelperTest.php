@@ -142,9 +142,9 @@ class FightHelperTest extends ModuleTestCase
         $this->g->takeAction($action->getId());
 
         // Validate if the AfterBattle hook works properly
-        $this->assertTrue($works);
         $this->assertSame(1, EventRegistry::$registration[FightModule::HookBattleOver]);
         $this->assertSame(1, EventRegistry::$registration[FightModule::HookActionChosen]);
+        $this->assertTrue($works);
 
         EventRegistry::reset();
     }

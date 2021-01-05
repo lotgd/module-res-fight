@@ -51,7 +51,7 @@ scenes:
         id: "20000000-0000-0000-0000-000000000007"
         title: "A fight!"
         description: ""
-        template: "lotgd/module-res-fight/battle"
+        template: "LotGD\\Module\\NewDay\\SceneTemplates\\BattleScene"
 
 scene_templates:
     -

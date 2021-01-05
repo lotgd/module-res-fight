@@ -12,7 +12,7 @@ class BattleScene implements SceneTemplateInterface
 {
     public static function getNavigationEvent(): string
     {
-        return Module::SceneGenderChoose;
+        return Module::SceneBattle;
     }
 
     public static function getScaffold(): Scene

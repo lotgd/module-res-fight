@@ -12,6 +12,7 @@ use LotGD\Core\Models\Scene;
 use LotGD\Module\Res\Fight\Module as FightModule;
 use LotGD\Module\Res\Fight\Events\EventFightActionsData;
 use LotGD\Module\Res\Fight\Events\EventFightActionChosenData;
+use LotGD\Module\Res\Fight\SceneTemplates\BattleScene;
 
 class Fight
 {
@@ -100,7 +101,7 @@ class Fight
 
         $scene = $this->game->getEntityManager()
             ->getRepository(Scene::class)
-            ->findOneBy(["template" => FightModule::SceneBattle]);
+            ->findOneBy(["template" => BattleScene::class]);
         $sceneId = $scene->getId();
 
         $parameterField = self::ActionParameterField;

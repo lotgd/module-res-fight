@@ -20,6 +20,9 @@ class NewDayResetTest extends ModuleTestCase
         return Yaml::parseFile(implode(DIRECTORY_SEPARATOR, [__DIR__, 'datasets', 'module.yml']));
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testHandleUnknownEvent()
     {
         // Always good to test a non-existing event just to make sure nothing happens :).
