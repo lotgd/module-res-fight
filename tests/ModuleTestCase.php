@@ -5,20 +5,20 @@ namespace LotGD\Module\Res\Fight\Tests;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use LotGD\Core\Action;
+use LotGD\Core\Configuration;
 use LotGD\Core\Doctrine\EntityPostLoadEventListener;
 use LotGD\Core\Exceptions\ArgumentException;
+use LotGD\Core\Game;
 use LotGD\Core\GameBuilder;
 use LotGD\Core\LibraryConfigurationManager;
 use LotGD\Core\ModelExtender;
+use LotGD\Core\Models\Module as ModuleModel;
 use LotGD\Core\Models\Viewpoint;
+use LotGD\Core\Tests\ModelTestCase;
 use Monolog\Logger;
 use Monolog\Handler\NullHandler;
 use PHPUnit\Framework\AssertionFailedError;
 use Symfony\Component\Yaml\Yaml;
-use LotGD\Core\Configuration;
-use LotGD\Core\Game;
-use LotGD\Core\Tests\ModelTestCase;
-use LotGD\Core\Models\Module as ModuleModel;
 
 use LotGD\Module\Res\Fight\Module;
 
