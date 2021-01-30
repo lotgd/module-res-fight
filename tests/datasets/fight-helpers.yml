@@ -52,7 +52,6 @@ scenes:
         title: "A fight!"
         description: ""
         template: "LotGD\\Module\\NewDay\\SceneTemplates\\BattleScene"
-
 scene_templates:
     -
         class: "LotGD\\Module\\Village\\SceneTemplates\\VillageScene"

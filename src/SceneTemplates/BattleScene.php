@@ -17,11 +17,11 @@ class BattleScene implements SceneTemplateInterface
 
     public static function getScaffold(): Scene
     {
-        $battleScene = Scene::create([
-            "template" => new SceneTemplate(self::class, "lotgd/module-res-fight"),
-            "title" => "A fight!",
-            "description" => "You are fighting."
-        ]);
+        $battleScene = new Scene(
+            title: "A fight!",
+            description: "You are fighting.",
+            template: new SceneTemplate(self::class, "lotgd/module-res-fight"),
+        );
 
         $battleScene->getTemplate()->setUserAssignable(false);
 

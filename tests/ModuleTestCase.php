@@ -69,28 +69,6 @@ class ModuleTestCase extends ModelTestCase
         parent::tearDown();
     }
 
-    protected function takeActions(Game $game, Viewpoint $viewpoint, array $actions)
-    {
-        foreach ($actions as $action) {
-            if (is_int($action)) {
-                $searchFor = "getDestinationSceneId";
-            } elseif (is_string($action)) {
-                $searchFor = "getTitle";
-            } else {
-                throw new \Exception("\$actions parameter must be a list containing integers or strings.");
-            }
-
-            foreach ($viewpoint->getActionGroups() as $group) {
-                foreach ($group->getActions() as $a) {
-                    if ($a->$searchFor() == $action) {
-                        $game->takeAction($a->getId());
-                        break 2;
-                    }
-                }
-            }
-        }
-    }
-
     protected function searchAction(Viewpoint $viewpoint, array $actionParams, ?string $groupTitle = null): ?Action
     {
         if (count($actionParams) != 2) {
@@ -126,25 +104,5 @@ class ModuleTestCase extends ModelTestCase
         }
 
         return $found;
-    }
-
-    protected function assertNotHasAction(Viewpoint $viewpoint, array $actionParams, ?string $groupTitle = null): void
-    {
-        $action = $this->searchAction($viewpoint, $actionParams, $groupTitle);
-
-        if ($action !== null) {
-            throw new AssertionFailedError("Assertion that viewpoint has not an action failed.");
-        }
-    }
-
-    protected function assertHasAction(Viewpoint $viewpoint, array $actionParams, ?string $groupTitle = null): Action
-    {
-        $action = $this->searchAction($viewpoint, $actionParams, $groupTitle);
-
-        if ($action === null) {
-            throw new AssertionFailedError("Assertion that viewpoint has action failed.");
-        }
-
-        return $action;
     }
 }
