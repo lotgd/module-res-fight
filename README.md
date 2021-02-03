@@ -1,7 +1,8 @@
-# module-res-fight
-[![Build Status](https://travis-ci.org/lotgd/module-res-fight.svg?branch=master)](https://travis-ci.org/lotgd/module-res-fight)
+# Resource module: Fight
+![Tests](https://github.com/lotgd/module-res-fight/workflows/Tests/badge.svg)
 
 This module provides helpers for other modules to:
+
 1. Initiate a fight
 2. Let character earn experience
 3. Let characters level up.
